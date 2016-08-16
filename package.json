@@ -8,15 +8,15 @@
   },
   "scripts": {
     "prestart": "babel-node tools/startMessage.js",
-    "start": "npm-run-all --parallel open:src lint:watch",
+    "start": "npm-run-all --parallel open:src lint:watch test:watch",
     "open:src": "babel-node tools/srcServer.js",
     "lint": "node_modules/.bin/esw webpack.config.* src tools",
-    "lint:watch": "npm run lint -- --watch"
+    "lint:watch": "npm run lint -- --watch",
+    "test": "mocha --reporter progress tools/testSetup.js \"src/**/*.test.js\"",
+    "test:watch": "npm run test -- --watch"
   },
-  
   "author": "",
   "license": "ISC",
-
   "dependencies": {
     "babel-polyfill": "6.8.0",
     "bootstrap": "3.3.6",
@@ -30,7 +30,6 @@
     "redux-thunk": "2.0.1",
     "toastr": "2.1.2"
   },
-
   "devDependencies": {
     "babel-cli": "6.8.0",
     "babel-core": "6.8.0",
@@ -48,7 +47,7 @@
     "eslint": "2.9.0",
     "eslint-plugin-import": "1.6.1",
     "eslint-plugin-react": "5.0.1",
-    "eslint-watch": "2.1.11",
+    "eslint-watch": "^2.1.11",
     "eventsource-polyfill": "0.9.6",
     "expect": "1.19.0",
     "express": "4.13.4",
@@ -69,5 +68,4 @@
     "webpack-dev-middleware": "1.6.1",
     "webpack-hot-middleware": "2.10.0"
   }
-  
 }
