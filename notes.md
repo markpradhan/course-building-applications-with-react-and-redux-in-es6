@@ -524,7 +524,228 @@ describe('Our first test', () => {
 
 ## React Component Approaches
 
+### Four Ways to Create React Components
+
+- es5 createClass
+- es6 class
+- es5 stateless function
+- es6 stateless function
+- there are many more..
+
+### ES6 Class Component
+
+- react es5 createclass autobound 'this' for you, react es6 class does not!
+- PropTypes declared seperately
+- Default props declared seperately
+- Set initial state in contructor
+
+> ES5 Createclass Syntax
+
+```javascript
+// works just fine
+<div onClick={this.handleClick}></div>
+```
+
+> ES6 Class Syntax
+
+```javascript
+// requires explicit bind with ES6 class
+<div onClick={this.handleClick.bind(this)}></div>
+
+// OR bind it in your class constructor
+class Contacts extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
+}
+```
+
+### Stateless Functional Components
+
+```javascript
+const HelloWorld = (props) => {
+  return (
+    <h1>Hello World</h1>
+  );
+};
+```
+
+**State vs Stateless Component**
+![State vs stateless component](/Users/mark/Sites/building-applications-with-react-and-redux-in-es6/note_images/image1471424153045.png)
+
+**Benefits of Stateless Components**
+- no class needed
+- avoid this keyword
+- enforced best practices (keep your presentational component pure)
+- high signal-to-noise ratio
+- enhanced code completion / intellisense
+- bloated components are obvious
+- easy to understand
+- easy to test
+- perfomance
+
+**When to use stateless components**
+
+*Class Component*:
+- State 
+- Reference to underlying DOM 
+- Lifecyle Methods 
+- Child functions (for performance)
+
+*Stateless Components*:
+- **everywhere else**
+
+### Component Approaches - Containver vs Presentational Components
+
+| Container | Presentation |
+|:---|----|
+| Little to no markup | Nearly all markup |
+| Pass data and action down | Receive data and actions via props |
+| Knows about Redux / Flux | Doesn't know about Redux / Flux |
+| Often stateful | Typically functional stateless components |
+
 ## Initial App Structure
+
+- best practice to keep all components in a components folder
+- give eacht component his own folder
+- mkdir src/components src/components/home src/components/about
+- touch src/components/home/homePage.jsx src/components/about/aboutPage.jsx
+
+> src/components/home/homePage.jsx
+
+```javascript 
+import React from 'react';
+import {Link} from 'react-router';
+
+class HomePage extends React.Component {
+  render() {
+    return (
+      <div className="jumbotron">
+        <h1>Pluralsight Administration</h1>
+        <p>React, Redux and Router in ES6 for ultra-responsive web apps.</p>
+        <Link to="about" className="btn btn-primary btn-lg">Learn More</Link>
+      </div>
+    );
+  }
+}
+
+export default HomePage;
+```
+
+> src/components/about/aboutPage.jsx
+
+```javascript
+import React from 'react';
+import {Link} from 'react-router';
+
+class AboutPage extends React.Component {
+  render() {
+    return (
+      <div>
+        <h1>About</h1>
+        <p>About page!</p>
+        <Link to="home" className="btn btn-primary btn-lg">Learn More</Link>
+      </div>
+    );
+  }
+}
+
+export default AboutPage;
+```
+
+### App.js
+
+**Layout, mother component**
+
+- touch src/App.js
+
+> src/components/App.js
+
+```javascript
+import React, {PropTypes} from 'react';
+
+class App extends React.Component {
+  render() {
+    return (
+      <div className="container-fluid">
+        <p>Header here..</p>
+        {this.props.children}
+      </div>
+    );
+  }
+}
+
+App.propTypes = {
+  children: PropTypes.object.isRequired
+};
+
+export default App;
+```
+
+### Routing
+
+- touch src/routes.jsx
+
+> src/routes.jsx
+
+```javascript
+import React from 'react';
+import { Route, IndexRoute } from 'react-router';
+import App from './components/App.jsx';
+import HomePage from './components/home/homePage.jsx';
+import AboutPage from './components/about/aboutPage.jsx';
+
+export default (
+  <Route path="/" component={App}>
+    <IndexRoute component={HomePage} />
+    <Route path="about" component={AboutPage} />
+  </Route>
+);
+```
+
+### Update Entrypoint
+
+> src/index.js
+
+```javascript
+import 'babel-polyfill';
+import React from 'react';
+import { render } from 'react-dom';
+import { Router, browserHistory } from 'react-router';
+import routes from './routes.jsx';
+import './styles/styles.css';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+
+render(
+  <Router history={browserHistory} routes={routes} />,
+  document.getElementById('app')
+);
+```
+
+### Header
+
+- mkdir src/components/common
+- touch src/components/common/header.jsx
+
+> src/components/common/header.jsx
+
+```javascript
+import React, {PropTypes} from 'react';
+import { Link, IndexLink } from 'react-router';
+
+const Header = () => {
+  return (
+    <nav>
+      <IndexLink to="/" activeClassName="active">Home</IndexLink>
+      {" | "}
+      <Link to="/about" activeClassName="active">About</Link>
+    </nav>
+  );
+};
+
+export default Header;
+```
 
 ## Intro to Redux
 

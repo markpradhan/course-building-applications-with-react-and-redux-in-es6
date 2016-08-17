@@ -1,0 +1,31 @@
+{
+  "globalDependencies": {
+    "bootstrap": "registry:dt/bootstrap#3.3.5+20160619023404",
+    "jquery": "registry:dt/jquery#1.10.0+20160704162008",
+    "react": "registry:dt/react#0.14.0+20160805125551",
+    "react-dom": "registry:dt/react-dom#0.14.0+20160412154040",
+    "react-redux": "registry:dt/react-redux#4.4.0+20160724070751",
+    "react-router": "registry:dt/react-router#2.0.0+20160813233016",
+    "react-router-redux": "registry:dt/react-router-redux#4.0.0+20160724070902",
+    "redux": "registry:dt/redux#3.5.2+20160703092728",
+    "redux-thunk": "registry:dt/redux-thunk#2.1.0+20160703120921",
+    "toastr": "registry:dt/toastr#2.1.1+20160510010435"
+  },
+  "globalDevDependencies": {
+    "babel-core": "registry:dt/babel-core#6.7.0+20160423062108",
+    "colors": "registry:dt/colors#0.6.0-1+20160501135139",
+    "compression": "registry:dt/compression#0.0.0+20160501162003",
+    "enzyme": "registry:dt/enzyme#2.4.1+20160709041153",
+    "expect": "registry:dt/expect#1.13.4+20160316155526",
+    "express": "registry:dt/express#4.0.0+20160708185218",
+    "jsdom": "registry:dt/jsdom#2.0.0+20160316155526",
+    "mocha": "registry:dt/mocha#2.2.5+20160720003353",
+    "nock": "registry:dt/nock#0.54.0+20160613160405",
+    "open": "registry:dt/open#0.0.3+20160316155526",
+    "react-addons-test-utils": "registry:dt/react-addons-test-utils#0.14.0+20160427035638",
+    "redux-immutable-state-invariant": "registry:dt/redux-immutable-state-invariant#1.2.0+20160316155526",
+    "redux-mock-store": "registry:dt/redux-mock-store#0.0.6+20160514173414",
+    "rimraf": "registry:dt/rimraf#0.0.0+20160317120654",
+    "webpack": "registry:dt/webpack#1.12.9+20160724112410"
+  }
+}

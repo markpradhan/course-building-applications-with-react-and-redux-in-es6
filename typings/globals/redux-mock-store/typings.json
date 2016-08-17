@@ -1,0 +1,8 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/acdc2d397ce53133deda238a55b4148c6cfdc901/redux-mock-store/redux-mock-store.d.ts",
+    "raw": "registry:dt/redux-mock-store#0.0.6+20160514173414",
+    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/acdc2d397ce53133deda238a55b4148c6cfdc901/redux-mock-store/redux-mock-store.d.ts"
+  }
+}

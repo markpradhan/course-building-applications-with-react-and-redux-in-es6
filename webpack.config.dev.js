@@ -23,9 +23,12 @@ export default {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   ],
+  resolve: {
+    extensions: ['', '.js', '.jsx']
+  },
   module: {
     loaders: [
-      { test: /\.js$/, include: path.join(__dirname, 'src'), loaders: ['babel'] },
+      { test: [/\.js$/, /\.jsx$/], include: path.join(__dirname, 'src'), loaders: ['babel'] },
       { test: /(\.css)$/, loaders: ['style', 'css'] },
       { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file' },
       { test: /\.(woff|woff2)$/, loader: 'url?prefix=font/&limit=5000' },
