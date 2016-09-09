@@ -572,7 +572,7 @@ const HelloWorld = (props) => {
 ```
 
 **State vs Stateless Component**
-![State vs stateless component](/Users/mark/Sites/building-applications-with-react-and-redux-in-es6/note_images/image1471424153045.png)
+![State vs stateless component](note_images/image1471424153045.png)
 
 **Benefits of Stateless Components**
 - no class needed
@@ -726,9 +726,9 @@ render(
 ### Header
 
 - mkdir src/components/common
-- touch src/components/common/header.jsx
+- touch src/components/common/Header.jsx
 
-> src/components/common/header.jsx
+> src/components/common/Header.jsx
 
 ```javascript
 import React, {PropTypes} from 'react';
@@ -747,11 +747,408 @@ const Header = () => {
 export default Header;
 ```
 
+### Coursepage
+
+- mkdir src/components/course
+- touch src/components/course/CoursesPage.jsx
+
+> src/components/course/CoursesPage.jsx
+
+```javascript
+import React, { PropTypes } from 'react';
+
+class CoursePage extends React.Component {
+  render() {
+    return (
+      <div>
+        <h1>Courses</h1>
+      </div>
+    );
+  }
+}
+
+export default CoursePage;
+```
+
+> src/routes.jsx
+
+```javascript
+//..
+import CoursesPage from './components/course/CoursesPage.jsx';
+//..
+<Route path="courses" component={CoursesPage} />
+//..
+```
+
+> src/components/common/Header.jsx
+
+```javascript
+
+```
+
 ## Intro to Redux
 
-## Actions, Stores and Reducers
+### Do I Need Redux
+
+Redux is usefull when:
+- complex data flows
+- inter-component communication
+- non-hierarchical data
+- many actions
+- same data used in multiple places
+
+#### Redux Store
+
+What makes redux special is it's store. The store allows us to connect components which are other not connected to dispatch actions or subscribe to them. This way our app state and data stay synced throughout the application.
+
+**Action disptached by component**
+![Action disptached by component](note_images/image1473356864425.png)
+
+**Data / State change trickles down to the relevant components**
+![Data / State change trickles down to the relevant components](note_images/image1473356902824.png)
+
+
+### Three Core Redux Principles
+
+- one immutable store (state cant be changed)
+- actions trigger changes
+- reducers update state 
+
+
+**Three Principles of Redux**
+![Three Principles of Redux](note_images/image1473358001092.png)
+
+### Redux Flow
+
+1. An action describes user intent
+
+> object with a type key and data key (can be whatever you want)
+
+```javascript
+{ type: RATE_COURSE, rating: 5 }
+```
+
+2. Store gets notified of action
+3. Store sends action to reducers
+4. Reducers accept state and return new state
+
+> Reducer
+
+```javascript
+function appReducer(state = defaultState, action) {
+  switch(action.type) {
+    case RATE_COURSE:
+      // return new state
+    default:
+      return state;
+  }
+}
+```
+
+5. Store gets new state
+6. React updates UI components
+
+
+**Data-flow through react-redux app**
+![Data-flow through react-redux app](note_images/image1473358653456.png)
+
+
+## Actions, Stores, Reducers and Immutability
+
+### Actions
+
+Events happening in the app are called 'actions'.
+They are just plain object describing events. They *must* have *type* key. The second property can hold data and is optional and can be of any type.
+
+> Example Action Creator
+
+```javascript
+const rateCourse = (rating) => ({ type: RATE_COURSE, rating: rating });
+```
+
+### Store
+
+In Redux you create the store by calling 'createStore' in your app entrypoint.
+You pass in the reducer in you 'createStore' fn.
+
+```javascript
+let store = createStore(reducer);
+```
+
+The store only handles data. Reducers handle state changes.
+
+> **Redux Store API**
+
+```javascript
+store.dispatch(action)
+store.subscribe(action)
+store.getState()
+replaceReducer(nextReducer) // -> for hot reloading
+
+// NO API FOR CHANGING STORE, only way to dispatch action is by dispatchin an action
+```
+
+### Immutability
+
+Immutability in a fundamental concept in Redux.
+**To change state return a new object.**
+
+| Already immutable | Mutable |
+|:---|----|
+| Number | Objects |
+| String | Arrays |
+| Boolean | Functions |
+| Undefined |  |
+| Null |  |
+
+> Immutability Example
+
+```javascript
+// current state
+state = {
+  name: 'Mark',
+  role: 'Author'
+}
+
+// traditional app - mutating state
+state.role = 'admin';
+return state;
+
+// immutable way - returning new object
+return state = {
+  name: 'Mark',
+  role: 'admin'
+}
+```
+
+> Creating copies of existing objects
+
+```javascript
+// Signature
+Object.assign(target, ...sources);
+
+// Example
+Object.assign({}, state, { role: 'admin' });
+```
+
+**Object Assign**
+- creates new empty objects
+- first parameter is the target (new empty object)
+- pass in our state as the second parameter
+- pass in what needs to be updated in the following parameters
+- **needs to be polyfilled, cant be transpiled to ES5**
+
+#### Why Immutability
+
+- **clarity**: when state is changed, we know exactly when and where it happened -> the reducer, in tradional apps state can be manipulated from many places which makes debuggin harder
+- **performance**: without Immutability redux would have to check the whole state to know if anything was updated, with immutability redux only has to check the memory reference of the old state vs new state. Are the the same, then nog changes have to be made. Are they different, state has changed, app needs to be updated.
+- **amazing debugging**: 
+  - time-travel debugging
+  - undo / redo
+  - turn off individual actions
+  - play interaction back
+
+#### Handling Immutability
+
+**ES6**
+- Object.assign
+- Spread operator
+
+#### How do i enforce immutability
+
+- Trust
+- redux-immutable-state-invariant -> on dev side
+
+### Reducers
+
+Simple functions that accepts state and action and return new state.
+
+> Reducer Example
+
+```javascript
+const myReducer = (state, action) => // return new state based on action;
+```
+
+> **WRONGLY IMPLEMENTED** Counter Reducer
+
+```javascript
+// state is mutated
+const myReducer = (state, action) => {
+  switch (action.type) {
+    case 'INCREMENT_COUNTER':
+      state.counter++;
+      return state;
+    default:
+      return state;
+  }
+}
+```
+
+> **CORRECTLY IMPLEMENTED** Counter Reducer
+
+```javascript
+const myReducer = (state, action) => {
+  switch (action.type) {
+    case 'INCREMENT_COUNTER':
+      return (
+        Object.assign({}, state, { counter: state.counter + 1 });
+      );
+    default:
+      return state;
+  }
+}
+```
+
+#### Reducers must be pure functions
+
+- produce no sideeffects
+- calling them with same set of arguments always return same value.
+
+**Forbidden in reducers**:
+- mutate arguments
+- perform side effects (api call, routing transitions, ..)
+- call non-pure functions (returned value should be dependant an passed in arguments, and no function like Date.now() or Math.random())
+
+**All reducers all called when an action is dispatched**
+![All reducers all called when an action is dispatched](note_images/image1473410417136.png)
+
+**Reducer = "Slice" of state**
+![Reducer = "Slice" of state](note_images/image1473410766823.png)
+
+_Straight from redux FAQ_:
+Write independent small reducer functions that are each responsible for update to a specific slice of state. We call this pattern "reducer composition". A give action could be handled by all, some, or none of them.
 
 ## Connecting React to Redux
+
+#### Two Component Types
+
+| Container | Presentational |
+|:---|----|
+| Focus on how thing work | Focus on how thing look |
+| Aware of Redux | Unaware of Redux |
+| Subscribe to Redux state | Read data from props |
+| Dispatch Redux actions | Invoke callbacks on props |
+| Generated by react-redux | Written by hand |
+
+### Connecting React to Redux
+
+**react-redux**
+![react-redux](note_images/image1473411271525.png)
+
+React-Redux exists of two main components
+
+| Provider | Connect |
+|:---|----|
+| Attaches app to store | Generates container components for you |
+
+
+> Provider component
+
+```jsx
+// By wrapping the app, provider passes in the store to all components. This way you dont have to pass in the store manually to all components. Uses React's 'context' to do this.
+<Provider Store={this.props.store}> 
+  <App />
+</Provider>
+```
+
+> Connect function
+
+```javascript
+// next chapter for more details
+const mapStateToProps = (state, ownProps) => ({ appState: state.authorReducer });
+export default connect(mapStateToProps, mapDispatchToProps)(AuthorPage);
+```
+
+Benefits of connect:
+- no manual unsubscribe
+- no lifecycle methods required
+- declare what subset of state you want
+- enhanced performance for free
+
+
+### mapStateToProps
+
+connect(**mapStateToProps**, mapDispatchToProps)
+
+- defines what part of the redux store you want to expose to your child component
+- when you define this function is subscribes to redux store's updates
+- each property you define will become a poperty on the component
+- in short: determines what poperties should be available in you component as props
+
+> simple example
+
+```javascript
+const mapStateToProps = (state) => ({ appState: state });
+// availabe in you component as this.props.appState
+```
+
+#### Reselect
+
+If you perform a lot of work, add reselect. This package will make sure your functions only get called once with the same parameters. It's a basicly caching for function calls.
+
+### mapDispatchToProps
+
+Exposes what actions you want to expose to your component.
+
+> simple example
+
+```javascript
+const mapDispatchToProps = (dispatch) => ({ actions: bindActionCreators(actions, dispatch) });
+```
+
+#### 3 Ways to Handle mapDispatchToProps
+
+**Option 1** Use Dispatch Directly
+
+Calling the connect function adds dispatch to you component automaticly.
+- `this.props.dispatch(loadCourses());` Will ignore mapDispatchToProps
+
+Downsides:
+- more boilerplate each time you want to fire an action
+- child components need to reference redux specific concepts
+
+**Option 2** Wrap Manually
+
+Manually wrap action creators and dispatch calls.
+Easy to start off with.
+
+```javascript
+const mapDispatchToProps = (dispatch) => ({
+  loadCourses: () => dispatch(loadCourses()),
+  createCourse: (course) => dispatch(createCourse(course)),
+  updateCourse: (course) => dispatch(updateCourse(course))
+});
+
+// in component
+this.props.loadCourses()
+```
+
+**Option 3** bindActionCreators
+
+This binds the actions and dispatch for you.
+
+```javascript
+const mapDispatchToProps = (dispatch) => ({ actions: bindActionCreators(actions, dispatch) });
+
+// in component
+this.props.actions.loadCourses();
+```
+
+### A simple overview of communication between React, Redux & React-Redux
+
+| Component | Execution |
+|:---|----|
+| React | "Save" btn has been clicked |
+| Action | Dispatches an action so reducers that care can update |
+| Reducer | Copy state and return new state |
+| Store | Send new state to all aware componennts |
+| React-Redux | Intelligently determines if react needs to update UI |
+| React | Applies state changes according to props passed down from store |
+
+
+
+
+
 
 ## Redux Flow
 
@@ -766,3 +1163,5 @@ export default Header;
 ## Testing Redux
 
 ## Production Builds
+
+
