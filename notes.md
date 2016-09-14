@@ -1009,8 +1009,8 @@ const myReducer = (state, action) => {
 - perform side effects (api call, routing transitions, ..)
 - call non-pure functions (returned value should be dependant an passed in arguments, and no function like Date.now() or Math.random())
 
-**All reducers all called when an action is dispatched**
-![All reducers all called when an action is dispatched](note_images/image1473410417136.png)
+**All reducers are called when an action is dispatched**
+![All reducers are called when an action is dispatched](note_images/image1473410417136.png)
 
 **Reducer = "Slice" of state**
 ![Reducer = "Slice" of state](note_images/image1473410766823.png)
